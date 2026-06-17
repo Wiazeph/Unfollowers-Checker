@@ -36,6 +36,18 @@ The pasted script injects a small, self-contained panel into instagram.com. It c
 - **Tune the timing** — every delay and cooldown is configurable in settings, or reset to the conservative defaults.
 - **Comfortable UI** — drag the panel anywhere, resize it from any edge or corner, minimize it, and switch theme (light / dark / system) and language (EN / TR / DE / FR / ES). Your preferences are remembered.
 
+## Tech stack
+
+- **Vite + React + TypeScript** — the single-page app
+- **Tailwind CSS** — styling, with hand-built accessible UI primitives (buttons, dialogs, theme/language toggles)
+- **TanStack Query** — data fetching, caching and parallel auth/lookup requests
+- **i18next + react-i18next** — internationalization (EN / TR / DE / FR / ES)
+- **lucide-react + sonner** — icons and toast notifications
+- **Hono on Cloudflare Workers** — the backend API and OAuth redirect handling; serves the SPA with single-page-application fallback (`@cloudflare/vite-plugin` builds the client into `dist/client`)
+- **AT Protocol OAuth (Bluesky) + GitHub / GitLab / Mastodon OAuth** — sign-in flows; credentials stay server-side so tokens never reach the browser
+- **Cloudflare Workers KV** — Bluesky AT Protocol OAuth state and session storage
+- **`node:crypto` (via `nodejs_compat`)** — HMAC-signed http-only cookies for GitHub/GitLab/Mastodon sessions
+
 ## Privacy & security
 
 - **No data is stored on our servers.** There's no database; follower/following lists are fetched, compared, and returned for a single request — never logged or saved. Your preferences (theme, language, and the Instagram panel's settings/layout) are kept only in your browser's local storage and never sent anywhere.
