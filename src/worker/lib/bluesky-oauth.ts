@@ -31,6 +31,14 @@ import { unfollow as repoUnfollow } from './bluesky.js'
 const STATE_PREFIX = 'bsky:oauth:state:'
 const SESSION_PREFIX = 'bsky:oauth:session:'
 
+// KV TTLs. The atproto OAuth library never passes expiration to .put(), so
+// without these every authorize attempt and every session would live in KV
+// forever — abandoned/expired entries pile up and inflate KV storage cost.
+// State is short-lived PKCE/DPoP material (consumed within one OAuth round
+// trip); sessions hold refresh tokens we want to keep usable for a while.
+const STATE_TTL_SECONDS = 600 // 10 minutes
+const SESSION_TTL_SECONDS = 60 * 60 * 24 * 90 // 90 days
+
 /** Origin used to build the OAuth client_id and redirect URIs (must be stable). */
 const publicUrl = (env: Env, request?: Request): string => {
   if (env.PUBLIC_URL) return env.PUBLIC_URL.replace(/\/$/, '')
@@ -52,10 +60,13 @@ const getOAuthClient = async (
 
   const base = publicUrl(env, request)
 
-  // KV stores. We namespace keys so the OAUTH_KV binding can be shared safely.
-  const stateStore = new StateStoreKV(prefixedKV(env.OAUTH_KV, STATE_PREFIX))
+  // KV stores. We namespace keys so the OAUTH_KV binding can be shared safely,
+  // and attach a TTL per store so entries expire instead of accumulating.
+  const stateStore = new StateStoreKV(
+    prefixedKV(env.OAUTH_KV, STATE_PREFIX, STATE_TTL_SECONDS),
+  )
   const sessionStore = new SessionStoreKV(
-    prefixedKV(env.OAUTH_KV, SESSION_PREFIX),
+    prefixedKV(env.OAUTH_KV, SESSION_PREFIX, SESSION_TTL_SECONDS),
   )
   const keyset = [await JoseKey.fromImportable(privateKey, 'bsky-key-1')]
 
@@ -111,16 +122,26 @@ const getOAuthClient = async (
 }
 
 /**
- * Wrap a KV namespace so every key is transparently prefixed. Lets the single
- * OAUTH_KV binding hold both the state and session stores without collisions,
- * preserving the original Redis key scheme.
+ * Wrap a KV namespace to transparently prefix every key (so the single OAUTH_KV
+ * binding can hold both stores without collisions) and apply a default TTL on
+ * writes — the library never sets expiration, so without this KV grows
+ * unbounded. A caller-supplied expiration wins.
  */
-const prefixedKV = (kv: KVNamespace, prefix: string): KVNamespace =>
+const prefixedKV = (
+  kv: KVNamespace,
+  prefix: string,
+  ttlSeconds: number,
+): KVNamespace =>
   ({
     get: (key: string, opts?: unknown) =>
       kv.get(prefix + key, opts as never),
-    put: (key: string, value: string, opts?: unknown) =>
-      kv.put(prefix + key, value, opts as never),
+    put: (key: string, value: string, opts?: KVNamespacePutOptions) => {
+      const withTtl: KVNamespacePutOptions =
+        opts?.expiration || opts?.expirationTtl
+          ? opts
+          : { ...opts, expirationTtl: ttlSeconds }
+      return kv.put(prefix + key, value, withTtl)
+    },
     delete: (key: string) => kv.delete(prefix + key),
   }) as unknown as KVNamespace
 
