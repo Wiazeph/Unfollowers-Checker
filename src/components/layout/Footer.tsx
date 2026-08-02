@@ -3,11 +3,11 @@ import { Globe, ShieldCheck, Heart, Mail, CircleDot } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { PrivacyDialog } from './PrivacyDialog'
 
-const REPO_URL = 'https://github.com/Wiazeph/GitHub-Unfollowers-Checker'
+const REPO_URL = 'https://github.com/emreerdendev/GitHub-Unfollowers-Checker'
 const ISSUES_URL =
-  'https://github.com/Wiazeph/GitHub-Unfollowers-Checker/issues'
+  'https://github.com/emreerdendev/GitHub-Unfollowers-Checker/issues'
 const SITE_URL = 'https://emreerden.dev'
-const SPONSOR_URL = 'https://github.com/sponsors/Wiazeph'
+const SPONSOR_URL = 'https://github.com/sponsors/emreerdendev'
 const CONTACT_EMAIL = 'emreerden@pm.me'
 
 const Dot = () => (

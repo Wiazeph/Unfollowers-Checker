@@ -108,7 +108,7 @@ const HANDLE_NOISE = new RegExp(
 
 /**
  * Turn whatever a user pasted into a bare handle. People paste profile links
- * (https://github.com/Wiazeph/, https://bsky.app/profile/name.bsky.social) or
+ * (https://github.com/emreerdendev/, https://bsky.app/profile/name.bsky.social) or
  * prefix an @, so we strip all of that down to the identifier.
  */
 export const normalizeHandle = (platform: PlatformId, raw: string): string => {

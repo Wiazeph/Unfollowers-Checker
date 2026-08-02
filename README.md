@@ -62,12 +62,12 @@ This is a free, personal utility and is **not affiliated with, endorsed by, or c
 
 ## Feedback & contact
 
-- **Found a bug or have a request?** [Open an issue](https://github.com/Wiazeph/GitHub-Unfollowers-Checker/issues) on GitHub.
+- **Found a bug or have a request?** [Open an issue](https://github.com/emreerdendev/GitHub-Unfollowers-Checker/issues) on GitHub.
 - **Anything else?** Email **emreerden@pm.me** or visit [emreerden.dev](https://emreerden.dev).
 
 ## Support
 
-This is a free, ad-free utility maintained in spare time. If it saved you some, you can [**❤️ Sponsor the project**](https://github.com/sponsors/Wiazeph) on GitHub Sponsors — any support helps keep it running and improving.
+This is a free, ad-free utility maintained in spare time. If it saved you some, you can [**❤️ Sponsor the project**](https://github.com/sponsors/emreerdendev) on GitHub Sponsors — any support helps keep it running and improving.
 
 ## Credits
 

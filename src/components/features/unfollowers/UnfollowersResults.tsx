@@ -36,7 +36,7 @@ interface UnfollowersResultsProps {
 
 const SKELETON_COUNT = 9
 const ISSUES_URL =
-  'https://github.com/Wiazeph/GitHub-Unfollowers-Checker/issues'
+  'https://github.com/emreerdendev/GitHub-Unfollowers-Checker/issues'
 
 const LOADING_KEYS = [
   'results.loading.following',
