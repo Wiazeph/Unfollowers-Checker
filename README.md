@@ -62,7 +62,7 @@ This is a free, personal utility and is **not affiliated with, endorsed by, or c
 
 ## Feedback & contact
 
-- **Found a bug or have a request?** [Open an issue](https://github.com/emreerdendev/GitHub-Unfollowers-Checker/issues) on GitHub.
+- **Found a bug or have a request?** [Open an issue](https://github.com/emreerdendev/Unfollowers-Checker/issues) on GitHub.
 - **Anything else?** Email **emreerden@pm.me** or visit [emreerden.dev](https://emreerden.dev).
 
 ## Support
